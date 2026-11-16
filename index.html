@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080a0f">
+  <meta name="description" content="البورتفوليو الشخصي لكيرو، مطور تطبيقات موبايل باستخدام Flutter.">
+  <title>كيرو | مطور تطبيقات موبايل</title>
+  <style>
+    :root {
+      --paper: #080a0f;
+      --white: #11151d;
+      --ink: #f1f5fa;
+      --muted: #9ba8b8;
+      --line: #29313d;
+      --green: #20a8ff;
+      --green-2: #10263a;
+      --orange: #73caff;
+      --yellow: #c1ceda;
+      --shadow: 0 20px 60px rgba(0, 137, 255, .14);
+      --radius: 22px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+      line-height: 1.65;
+    }
+    button, input, textarea, select { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    a { color: inherit; text-decoration: none; }
+    .shell { width: min(1120px, calc(100% - 40px)); margin-inline: auto; }
+    .topbar {
+      position: sticky; top: 0; z-index: 5;
+      background: rgba(245, 243, 238, .9); backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(222, 222, 213, .8);
+    }
+    .nav { min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 800; letter-spacing: -.03em; }
+    .brand-mark { width: 37px; height: 37px; display: grid; place-items: center; border-radius: 12px; color: white; background: var(--green); font-size: 14px; }
+    .nav-links { display: flex; align-items: center; gap: 28px; color: var(--muted); font-size: 14px; }
+    .nav-links a:hover { color: var(--green); }
+    .button {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      min-height: 46px; padding: 0 18px; border: 1px solid transparent; border-radius: 13px;
+      font-weight: 700; font-size: 14px; cursor: pointer; transition: .18s ease;
+    }
+    .button:hover { transform: translateY(-1px); }
+    .button-primary { color: #fff; background: var(--green); }
+    .button-primary:hover { background: #174937; }
+    .button-light { color: var(--ink); background: var(--white); border-color: var(--line); }
+    .button-quiet { color: var(--green); background: transparent; border-color: #b8c9be; }
+    .button-danger { color: #a63d2d; background: #fff1ec; border-color: #f2d0c4; }
+    .button-small { min-height: 38px; padding-inline: 13px; font-size: 13px; }
+    .hero { padding: 74px 0 64px; }
+    .hero-grid { display: grid; grid-template-columns: 1.2fr .8fr; gap: 58px; align-items: center; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 9px; color: var(--green); font-size: 13px; font-weight: 800; letter-spacing: .02em; }
+    .eyebrow-dot { width: 8px; height: 8px; background: var(--orange); border-radius: 50%; }
+    h1 { max-width: 700px; margin: 18px 0 17px; font-size: clamp(42px, 6vw, 72px); line-height: 1.12; letter-spacing: -.055em; }
+    h1 .accent { color: var(--green); }
+    .hero-copy { max-width: 570px; color: var(--muted); font-size: 18px; margin: 0 0 27px; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 11px; }
+    .hero-card {
+      min-height: 340px; padding: 28px; position: relative; overflow: hidden;
+      border: 1px solid #d8d9cf; border-radius: 28px; background: var(--white); box-shadow: var(--shadow);
+    }
+    .hero-card::before { content: ""; position: absolute; width: 260px; height: 260px; border-radius: 50%; background: #e7efe5; top: -92px; left: -94px; }
+    .hero-card::after { content: ""; position: absolute; width: 130px; height: 130px; border: 1px solid #d5dfd4; border-radius: 50%; top: -26px; left: -28px; }
+    .portrait-placeholder { position: relative; z-index: 1; height: 180px; display: grid; place-items: center; margin-bottom: 23px; }
+    .monogram { width: 120px; height: 120px; display: grid; place-items: center; border-radius: 38px; transform: rotate(-7deg); color: #fff; background: var(--green); box-shadow: 15px 17px 0 #e8b16f; font-size: 38px; font-weight: 850; letter-spacing: -.07em; }
+    .hero-card-info { position: relative; z-index: 1; display: flex; align-items: end; justify-content: space-between; gap: 12px; }
+    .hero-card-info strong { display: block; font-size: 20px; }
+    .hero-card-info span { color: var(--muted); font-size: 13px; }
+    .age-pill { padding: 7px 11px; border-radius: 99px; background: #f7edcf; color: #695623; font-size: 12px; font-weight: 800; white-space: nowrap; }
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 42px; }
+    .stat { padding: 17px 19px; border-top: 1px solid var(--line); }
+    .stat strong { display: block; color: var(--green); font-size: 18px; }
+    .stat span { color: var(--muted); font-size: 12px; }
+    .section { padding: 76px 0; }
+    .section-head { display: flex; justify-content: space-between; align-items: end; gap: 24px; margin-bottom: 27px; }
+    .section-kicker { color: var(--green); font-size: 12px; font-weight: 850; letter-spacing: .1em; text-transform: uppercase; }
+    h2 { margin: 7px 0 0; font-size: clamp(28px, 4vw, 42px); letter-spacing: -.045em; line-height: 1.2; }
+    .section-note { max-width: 390px; color: var(--muted); font-size: 14px; margin: 0; }
+    .project-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+    .project-card { min-height: 285px; padding: 24px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--white); display: flex; flex-direction: column; box-shadow: 0 8px 24px rgba(31,45,38,.035); }
+    .project-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; }
+    .project-symbol { width: 52px; height: 52px; display: grid; place-items: center; border-radius: 16px; color: var(--green); background: var(--green-2); font-weight: 850; font-size: 17px; }
+    .project-card:nth-child(even) .project-symbol { color: #784424; background: #f6e6d7; }
+    .project-status { padding: 6px 10px; border-radius: 99px; color: #58645d; background: #f0f0e9; font-size: 11px; font-weight: 750; }
+    .project-card h3 { margin: 18px 0 5px; font-size: 21px; letter-spacing: -.03em; }
+    .project-description { color: var(--muted); font-size: 14px; margin: 0 0 17px; }
+    .project-foot { margin-top: auto; padding-top: 15px; border-top: 1px solid #ecece4; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .tag-list { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tag { padding: 4px 9px; border-radius: 8px; color: #5e6962; background: #f0f1eb; font-size: 11px; }
+    .project-link { color: var(--green); font-size: 13px; font-weight: 800; white-space: nowrap; }
+    .empty-state { grid-column: 1/-1; padding: 40px; text-align: center; border: 1px dashed #c9cec4; border-radius: var(--radius); color: var(--muted); }
+    .about-band { padding: 31px; border-radius: 25px; background: #e7ede5; display: grid; grid-template-columns: .7fr 1.3fr; gap: 35px; align-items: center; }
+    .about-band h2 { font-size: 30px; }
+    .about-band p { max-width: 640px; margin: 0; color: #57635b; }
+    .contact { padding-bottom: 78px; }
+    .contact-box { padding: 33px; border-radius: 25px; color: white; background: var(--green); display: flex; justify-content: space-between; align-items: center; gap: 24px; }
+    .contact-box h2 { margin: 0 0 7px; font-size: 28px; }
+    .contact-box p { margin: 0; color: #d5e1d9; font-size: 14px; }
+    .contact-box .button { color: var(--ink); background: var(--white); }
+    footer { padding: 20px 0 28px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
+    .footer-row { display: flex; justify-content: space-between; gap: 12px; }
+    .admin-view { min-height: calc(100vh - 76px); padding: 44px 0 76px; }
+    .admin-heading { display: flex; justify-content: space-between; align-items: start; gap: 22px; margin-bottom: 24px; }
+    .admin-heading h1 { font-size: clamp(33px, 5vw, 48px); margin: 5px 0 7px; }
+    .admin-heading p { margin: 0; color: var(--muted); }
+    .notice { padding: 15px 17px; border: 1px solid #e7d7a9; border-radius: 14px; color: #675622; background: #fcf5df; font-size: 13px; margin-bottom: 22px; }
+    .admin-layout { display: grid; grid-template-columns: .9fr 1.1fr; gap: 20px; align-items: start; }
+    .panel { padding: 23px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--white); box-shadow: 0 8px 24px rgba(31,45,38,.035); }
+    .panel h2 { font-size: 20px; margin: 0 0 15px; }
+    .form-grid { display: grid; gap: 13px; }
+    .field { display: grid; gap: 6px; }
+    .field label { color: #4b5750; font-size: 12px; font-weight: 800; }
+    .field input, .field textarea, .field select { width: 100%; border: 1px solid #d8dbd2; border-radius: 11px; background: #fff; padding: 11px 12px; color: var(--ink); outline: none; }
+    .field input:focus, .field textarea:focus, .field select:focus { border-color: #6c9880; box-shadow: 0 0 0 3px #e4eee7; }
+    .field textarea { min-height: 94px; resize: vertical; }
+    .form-actions { display: flex; flex-wrap: wrap; gap: 9px; padding-top: 4px; }
+    .admin-list { display: grid; gap: 11px; }
+    .admin-item { padding: 14px; border: 1px solid #e7e8e0; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; gap: 13px; }
+    .admin-item strong { display: block; font-size: 14px; }
+    .admin-item small { display: block; margin-top: 3px; color: var(--muted); font-size: 11px; }
+    .admin-actions { display: flex; flex-shrink: 0; gap: 7px; }
+    .admin-tools { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .storage-note { color: var(--muted); font-size: 12px; margin: 14px 0 0; }
+    .toast { position: fixed; z-index: 10; inset-inline-start: 20px; bottom: 20px; padding: 12px 17px; border-radius: 12px; color: #fff; background: #263b31; box-shadow: var(--shadow); opacity: 0; transform: translateY(10px); transition: .2s ease; pointer-events: none; font-size: 13px; }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .hidden { display: none !important; }
+    /* Electric-blue / deep-black visual direction */
+    body { background: radial-gradient(ellipse at 78% 0%, rgba(0, 116, 220, .10), transparent 32%), var(--paper); }
+    .topbar { background: rgba(8, 10, 15, .88); border-bottom-color: rgba(73, 91, 112, .38); }
+    .button-primary { color: #04111d; background: #28adff; box-shadow: 0 7px 22px rgba(0, 145, 255, .20); }
+    .button-primary:hover { background: #67c5ff; }
+    .button-light { color: var(--ink); background: #121821; border-color: #303b49; }
+    .button-quiet { color: #73caff; border-color: #285579; }
+    .button-danger { color: #ff9d98; background: #281719; border-color: #583035; }
+    .hero { background-image: radial-gradient(ellipse at 86% 40%, rgba(0, 135, 255, .07), transparent 40%); }
+    .hero-card { min-height: 390px; padding: 18px; border-color: #29394a; background: linear-gradient(145deg, #111821, #0c1017 72%); box-shadow: 0 22px 65px rgba(0, 0, 0, .35), 0 0 45px rgba(0, 125, 255, .09); }
+    .hero-card::before { width: 300px; height: 300px; top: -75px; left: -86px; background: radial-gradient(circle, rgba(0, 146, 255, .26), rgba(0, 87, 160, .08) 48%, transparent 70%); }
+    .hero-card::after { border-color: rgba(133, 190, 235, .16); }
+    .showcase { height: 254px; position: relative; z-index: 1; overflow: hidden; border: 1px solid #203248; border-radius: 20px; background: radial-gradient(ellipse at 48% 48%, rgba(0, 122, 224, .20), transparent 48%), linear-gradient(145deg, #0d1723, #090c12 68%); }
+    .showcase::before { content: ""; position: absolute; inset: 0; opacity: .32; background-image: linear-gradient(rgba(145, 185, 220, .08) 1px, transparent 1px), linear-gradient(90deg, rgba(145, 185, 220, .08) 1px, transparent 1px); background-size: 25px 25px; mask-image: linear-gradient(135deg, black, transparent 80%); }
+    .phone { position: absolute; top: 19px; width: 150px; height: 224px; padding: 12px; border: 1px solid #53687d; border-radius: 25px; background: linear-gradient(150deg, #19232e, #0a0e14 65%); box-shadow: 0 18px 35px rgba(0, 0, 0, .55); }
+    .phone-back { left: 34px; top: 40px; transform: rotate(-11deg); opacity: .72; }
+    .phone-front { left: 50%; transform: translateX(-50%) rotate(5deg); z-index: 2; }
+    .phone-notch { width: 45px; height: 5px; margin: 0 auto 12px; border-radius: 6px; background: #536171; }
+    .mock-caption { color: #84a0bc; font-size: 8px; letter-spacing: .12em; text-transform: uppercase; }
+    .mock-title { margin: 4px 0 11px; color: #f2f7fc; font-size: 14px; font-weight: 800; }
+    .mock-project { display: flex; align-items: center; gap: 8px; margin-top: 8px; padding: 8px; border: 1px solid rgba(149, 177, 205, .16); border-radius: 10px; background: rgba(255, 255, 255, .045); }
+    .mock-icon { width: 24px; height: 24px; display: grid; place-items: center; flex: 0 0 auto; border-radius: 7px; color: #8bd5ff; background: #103352; font-size: 10px; font-weight: 900; }
+    .mock-project b { display: block; color: #e8eff7; font-size: 8px; line-height: 1.3; }
+    .mock-project small { display: block; color: #8998a9; font-size: 7px; }
+    .mock-progress { height: 5px; overflow: hidden; margin-top: 12px; border-radius: 9px; background: #26313d; }
+    .mock-progress::after { content: ""; display: block; width: 72%; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #168df0, #71d3ff); }
+    .float-chip { position: absolute; z-index: 3; right: 14px; bottom: 16px; padding: 8px 11px; border: 1px solid #2d455c; border-radius: 11px; color: #a8ddff; background: rgba(12, 20, 29, .92); box-shadow: 0 9px 24px rgba(0,0,0,.3); font-size: 9px; font-weight: 800; letter-spacing: .12em; }
+    .hero-card-info { margin: 17px 5px 0; }
+    .hero-card-info strong { color: #f3f6fa; }
+    .age-pill { color: #a9ddff; background: #10283c; border: 1px solid #1e4a6a; }
+    .stat strong, .section-kicker, .eyebrow, .project-link { color: #49b9ff; }
+    .stat { border-top-color: #273544; }
+    .project-card, .panel { border-color: #28323f; background: linear-gradient(145deg, #121720, #0e1219); box-shadow: 0 12px 34px rgba(0, 0, 0, .22); }
+    .project-card { transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease; }
+    .project-card:hover { transform: translateY(-4px); border-color: #2878ac; box-shadow: 0 18px 45px rgba(0, 108, 190, .12); }
+    .project-symbol { color: #9bdbff; background: #102c43; }
+    .project-card:nth-child(even) .project-symbol { color: #d5e5f4; background: #202a36; }
+    .project-status, .tag { color: #bec9d5; background: #202833; }
+    .project-foot { border-top-color: #27313d; }
+    .about-band { border: 1px solid #223b50; background: linear-gradient(120deg, #101d2a, #11151d 78%); }
+    .about-band p { color: #aeb9c7; }
+    .contact-box { border: 1px solid #287ab1; background: radial-gradient(ellipse at 15% 0%, rgba(25, 158, 255, .27), transparent 48%), linear-gradient(120deg, #112b42, #10151d 80%); }
+    .contact-box p { color: #becbd8; }
+    .contact-box .button { color: #08131d; background: #dbe8f4; }
+    footer { border-top-color: #252e39; }
+    .notice { color: #b9e5ff; border-color: #234967; background: #102131; }
+    .field label, .admin-item strong { color: #dce5ee; }
+    .field input, .field textarea, .field select { color: #f1f5fa; border-color: #303b49; background: #0a0f15; }
+    .field input::placeholder, .field textarea::placeholder { color: #667588; }
+    .field input:focus, .field textarea:focus, .field select:focus { border-color: #36aaff; box-shadow: 0 0 0 3px rgba(31, 160, 255, .14); }
+    .admin-item { border-color: #293440; background: rgba(255,255,255,.02); }
+    .admin-item small, .storage-note { color: #8f9cac; }
+    .toast { background: #123c5a; }
+    .empty-state { color: #a8b4c2; border-color: #334458; background: rgba(255,255,255,.02); }
+    @media (max-width: 780px) { .hero-card { min-height: auto; } }
+    @media (max-width: 780px) {
+      .nav { min-height: 66px; }
+      .nav-links { gap: 15px; font-size: 12px; }
+      .nav-links a:nth-child(2), .nav-links a:nth-child(3) { display: none; }
+      .nav .button { min-height: 40px; padding-inline: 12px; font-size: 12px; }
+      .hero { padding: 48px 0 38px; }
+      .hero-grid { grid-template-columns: 1fr; gap: 28px; }
+      .hero-card { min-height: auto; }
+      .portrait-placeholder { height: 145px; }
+      .monogram { width: 104px; height: 104px; }
+      .stats { margin-top: 25px; }
+      .section { padding: 55px 0; }
+      .section-head { align-items: start; flex-direction: column; }
+      .about-band { grid-template-columns: 1fr; gap: 14px; }
+      .admin-layout { grid-template-columns: 1fr; }
+      .contact-box { align-items: start; flex-direction: column; }
+    }
+    @media (max-width: 520px) {
+      .shell { width: min(100% - 28px, 1120px); }
+      .nav-links { display: none; }
+      h1 { font-size: 43px; }
+      .hero-copy { font-size: 16px; }
+      .stats { grid-template-columns: repeat(3, 1fr); gap: 3px; }
+      .stat { padding: 12px 7px; }
+      .stat strong { font-size: 15px; }
+      .stat span { font-size: 10px; }
+      .project-grid { grid-template-columns: 1fr; }
+      .project-card { min-height: 260px; }
+      .admin-heading { flex-direction: column; }
+      .panel { padding: 17px; }
+      .admin-item { align-items: start; flex-direction: column; }
+      .admin-actions { width: 100%; }
+      .admin-actions .button { flex: 1; }
+      .footer-row { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="shell nav">
+      <a class="brand" href="#home" aria-label="كيرو - الصفحة الرئيسية"><span class="brand-mark">K</span><span>كيرو<span style="color:var(--green)">.</span></span></a>
+      <nav class="nav-links" aria-label="التنقل الرئيسي">
+        <a href="#home">الرئيسية</a><a href="#projects">المشاريع</a><a href="#about">عني</a><a href="#contact">تواصل</a>
+      </nav>
+      <a class="button button-primary button-small" href="#manage">إدارة المشاريع <span aria-hidden="true">↗</span></a>
+    </div>
+  </header>
+  <main id="app"></main>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <input id="import-file" class="hidden" type="file" accept="application/json,.json">
+  <script>
+    (() => {
+      const STORAGE_KEY = 'kero-portfolio-projects-v1';
+      const initialProjects = [
+        {
+          id: 'tager-1032', name: 'Tager — الإصدار 1.0.32',
+          summary: 'الملف المرفق يحتوي على نسخة Android بصيغة APK. محتاجين نضيف وصفًا مختصرًا لدورك ومميزات التطبيق بعد تأكيدك.',
+          stack: 'Android APK • التقنية تحتاج تأكيد', status: 'نسخة مرفقة', year: '', url: ''
+        },
+        {
+          id: 'sitr-130', name: 'سِتر — الإصدار 1.3.0',
+          summary: 'تطبيق أندرويد لتنظيم المشاريع وإصداراتها وملفاتها، مع خزنة محلية مشفّرة للملفات والأسرار.',
+          stack: 'Android • Java • AES-GCM', status: 'مكتمل', year: '', url: ''
+        }
+      ];
+      const app = document.getElementById('app');
+      const toast = document.getElementById('toast');
+      const importFile = document.getElementById('import-file');
+      let editingId = null;
+      let toastTimer;
+
+      function escapeHTML(value) {
+        return String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+      }
+      function readProjects() {
+        try {
+          const stored = localStorage.getItem(STORAGE_KEY);
+          if (!stored) return initialProjects.map(project => ({...project}));
+          const parsed = JSON.parse(stored);
+          return Array.isArray(parsed) ? parsed : initialProjects.map(project => ({...project}));
+        } catch (_) { return initialProjects.map(project => ({...project})); }
+      }
+      function saveProjects(projects) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(projects));
+      }
+      function safeLink(url) {
+        try {
+          const parsed = new URL(url);
+          return ['http:', 'https:'].includes(parsed.protocol) ? parsed.href : '';
+        } catch (_) { return ''; }
+      }
+      function showToast(message) {
+        toast.textContent = message;
+        toast.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => toast.classList.remove('show'), 2400);
+      }
+      function tagsFor(project) {
+        return String(project.stack || '').split(/[،,•|]/).map(tag => tag.trim()).filter(Boolean).slice(0, 4)
+          .map(tag => `<span class="tag">${escapeHTML(tag)}</span>`).join('');
+      }
+      function projectCard(project) {
+        const title = escapeHTML(project.name || 'مشروع جديد');
+        const link = safeLink(project.url || '');
+        const short = [...String(project.name || 'K').trim()][0] || 'K';
+        return `<article class="project-card">
+          <div class="project-top"><div class="project-symbol" aria-hidden="true">${escapeHTML(short)}</div><span class="project-status">${escapeHTML(project.status || 'مشروع')}</span></div>
+          <h3>${title}</h3><p class="project-description">${escapeHTML(project.summary || '')}</p>
+          <div class="project-foot"><div class="tag-list">${tagsFor(project)}</div>${link ? `<a class="project-link" href="${escapeHTML(link)}" target="_blank" rel="noopener noreferrer">عرض المشروع ↗</a>` : `<span class="project-link">${escapeHTML(project.year || '')}</span>`}</div>
+        </article>`;
+      }
+      function renderHome() {
+        const projects = readProjects();
+        app.innerHTML = `<section class="hero" id="home"><div class="shell">
+          <div class="hero-grid"><div>
+            <span class="eyebrow"><span class="eyebrow-dot"></span> مطور تطبيقات موبايل · Flutter</span>
+            <h1>أهلًا، أنا كيرو.<br><span class="accent">ببني تطبيقات</span> للموبايل.</h1>
+            <p class="hero-copy">عندي 19 سنة وبطوّر تطبيقات موبايل باستخدام Flutter. دي البداية لبورتفوليو أعرض فيه نبذة عني والمشاريع اللي بشتغل عليها.</p>
+            <div class="hero-actions"><a class="button button-primary" href="#projects">شوف المشاريع <span aria-hidden="true">↓</span></a><a class="button button-light" href="#about">نبذة عني</a></div>
+            <div class="stats"><div class="stat"><strong>19 سنة</strong><span>العمر</span></div><div class="stat"><strong>Flutter</strong><span>التخصص الحالي</span></div><div class="stat"><strong>${projects.length}</strong><span>مشاريع مضافة</span></div></div>
+          </div>
+          <aside class="hero-card" aria-label="تصميم بصري تجريبي لمشاريع كيرو"><div class="showcase">
+            <div class="phone phone-back"><div class="phone-notch"></div><div class="mock-caption">Developer portfolio</div><div class="mock-title">Showcase</div><div class="mock-project"><span class="mock-icon">T</span><div><b>Tager</b><small>Android · 1.0.32</small></div></div><div class="mock-project"><span class="mock-icon">S</span><div><b>Sitr</b><small>Android · 1.3.0</small></div></div><div class="mock-progress"></div></div>
+            <div class="phone phone-front"><div class="phone-notch"></div><div class="mock-caption">Kero / mobile apps</div><div class="mock-title">My Projects</div><div class="mock-project"><span class="mock-icon">&lt;/&gt;</span><div><b>Flutter builds</b><small>Ideas to interfaces</small></div></div><div class="mock-project"><span class="mock-icon">✦</span><div><b>Clean experience</b><small>Thoughtful details</small></div></div><div class="mock-progress"></div></div>
+            <div class="float-chip">FLUTTER · DART</div>
+          </div><div class="hero-card-info"><div><strong>من الفكرة للشاشة</strong><span>مساحة لعرض شغلك وتطورك</span></div><span class="age-pill">MOBILE DEVELOPER</span></div></aside></div>
+        </div></section>
+        <section class="section" id="projects"><div class="shell">
+          <div class="section-head"><div><span class="section-kicker">أعمال مختارة</span><h2>المشاريع</h2></div><p class="section-note">المشاريع المبدئية اتجمعت من الملفات اللي أرفقتها. تقدر تضيف أو تعدّل مشاريع من صفحة الإدارة.</p></div>
+          <div class="project-grid">${projects.length ? projects.map(projectCard).join('') : '<div class="empty-state">لسه مفيش مشاريع. افتح إدارة المشاريع وأضف أول مشروع.</div>'}</div>
+        </div></section>
+        <section class="section" id="about"><div class="shell"><div class="about-band"><div><span class="section-kicker">نبذة سريعة</span><h2>عن كيرو</h2></div><p>أنا كيرو، عندي 19 سنة ومهتم بتطوير تطبيقات الموبايل باستخدام Flutter. دي نسخة أولية من موقعي، والتفاصيل الإضافية عن خبرتي واهتماماتي هتتضاف لما تحددها.</p></div></div></section>
+        <section class="contact" id="contact"><div class="shell"><div class="contact-box"><div><h2>خلّينا نكمل البورتفوليو</h2><p>أضفنا بياناتك الأساسية ومشروعين من المرفقات. باقي التفاصيل نكمّلها سوا.</p></div><a class="button" href="#manage">إدارة المشاريع ↗</a></div></div></section>
+        <footer><div class="shell footer-row"><span>© ${new Date().getFullYear()} كيرو</span><span>نموذج أولي شخصي · قابل للتطوير</span></div></footer>`;
+      }
+      function renderAdmin() {
+        const projects = readProjects();
+        app.innerHTML = `<section class="admin-view"><div class="shell">
+          <div class="admin-heading"><div><span class="section-kicker">لوحة تجريبية</span><h1>إدارة المشاريع</h1><p>أضف مشروعًا أو عدّل بياناته، وشوف النتيجة في صفحة البورتفوليو.</p></div><a class="button button-light" href="#home">العودة للموقع ↗</a></div>
+          <div class="notice"><strong>مهم:</strong> الحفظ الآن على هذا المتصفح والجهاز فقط (LocalStorage). أي تعديل هنا لا يظهر تلقائيًا للزوار أو على أجهزة أخرى، واللوحة غير محمية بتسجيل دخول. مناسبة للتجربة فقط.</div>
+          <div class="admin-layout"><section class="panel"><h2 id="form-title">إضافة مشروع</h2>
+            <form id="project-form" class="form-grid">
+              <div class="field"><label for="project-name">اسم المشروع *</label><input id="project-name" name="name" required maxlength="80" placeholder="مثال: تطبيق مهامي"></div>
+              <div class="field"><label for="project-summary">وصف مختصر *</label><textarea id="project-summary" name="summary" required maxlength="260" placeholder="إيه فكرة المشروع؟ وإنت عملت فيه إيه؟"></textarea></div>
+              <div class="field"><label for="project-stack">التقنيات (افصل بينها بفاصلة)</label><input id="project-stack" name="stack" maxlength="100" placeholder="Flutter, Firebase, Dart"></div>
+              <div class="field"><label for="project-status">حالة المشروع</label><select id="project-status" name="status"><option>مكتمل</option><option>قيد التطوير</option><option>نسخة تجريبية</option><option>موقوف مؤقتًا</option></select></div>
+              <div class="field"><label for="project-year">السنة</label><input id="project-year" name="year" maxlength="4" inputmode="numeric" placeholder="2026"></div>
+              <div class="field"><label for="project-url">رابط المشروع (اختياري)</label><input id="project-url" name="url" type="url" placeholder="https://..."></div>
+              <div class="form-actions"><button class="button button-primary" type="submit" id="save-button">إضافة المشروع</button><button class="button button-light hidden" type="button" id="cancel-edit">إلغاء التعديل</button></div>
+            </form>
+          </section>
+          <section class="panel"><h2>المشاريع الحالية <span id="project-count" style="color:var(--muted);font-size:13px;font-weight:500"></span></h2>
+            <div class="admin-list" id="admin-list"></div>
+            <div class="admin-tools"><button class="button button-quiet button-small" type="button" id="export-data">تصدير نسخة JSON</button><button class="button button-quiet button-small" type="button" id="import-data">استيراد JSON</button><button class="button button-danger button-small" type="button" id="reset-data">استعادة بيانات البداية</button></div>
+            <p class="storage-note">احتفظ بنسخة JSON لو جرّبت بياناتك؛ مسح بيانات المتصفح قد يمسحها.</p>
+          </section></div>
+        </div></section><footer><div class="shell footer-row"><span>لوحة إدارة تجريبية</span><a href="#home">العودة للصفحة الرئيسية</a></div></footer>`;
+        bindAdmin();
+        renderAdminList();
+      }
+      function renderAdminList() {
+        const list = document.getElementById('admin-list');
+        if (!list) return;
+        const projects = readProjects();
+        document.getElementById('project-count').textContent = `(${projects.length})`;
+        list.innerHTML = projects.length ? projects.map(project => `<div class="admin-item"><div><strong>${escapeHTML(project.name || 'مشروع')}</strong><small>${escapeHTML(project.stack || 'بدون تقنيات محددة')} · ${escapeHTML(project.status || 'مشروع')}</small></div><div class="admin-actions"><button class="button button-light button-small" type="button" data-edit="${escapeHTML(project.id)}">تعديل</button><button class="button button-danger button-small" type="button" data-delete="${escapeHTML(project.id)}">حذف</button></div></div>`).join('') : '<div class="empty-state">مفيش مشاريع مضافة حاليًا.</div>';
+        list.querySelectorAll('[data-edit]').forEach(button => button.addEventListener('click', () => startEdit(button.dataset.edit)));
+        list.querySelectorAll('[data-delete]').forEach(button => button.addEventListener('click', () => deleteProject(button.dataset.delete)));
+      }
+      function bindAdmin() {
+        const form = document.getElementById('project-form');
+        form.addEventListener('submit', event => {
+          event.preventDefault();
+          const data = new FormData(form);
+          const name = String(data.get('name') || '').trim();
+          const summary = String(data.get('summary') || '').trim();
+          const urlValue = String(data.get('url') || '').trim();
+          if (urlValue && !safeLink(urlValue)) { showToast('الرابط لازم يبدأ بـ https:// أو http://'); return; }
+          const project = {
+            id: editingId || (crypto.randomUUID ? crypto.randomUUID() : `project-${Date.now()}`),
+            name, summary, stack: String(data.get('stack') || '').trim(),
+            status: String(data.get('status') || 'مكتمل'), year: String(data.get('year') || '').trim(), url: urlValue
+          };
+          const projects = readProjects();
+          if (editingId) {
+            const index = projects.findIndex(item => item.id === editingId);
+            if (index >= 0) projects[index] = project;
+            showToast('تم تحديث المشروع في هذا المتصفح');
+          } else {
+            projects.unshift(project);
+            showToast('تمت إضافة المشروع في هذا المتصفح');
+          }
+          saveProjects(projects);
+          form.reset();
+          document.getElementById('project-year').value = String(new Date().getFullYear());
+          stopEdit();
+          renderAdminList();
+        });
+        document.getElementById('cancel-edit').addEventListener('click', stopEdit);
+        document.getElementById('export-data').addEventListener('click', exportData);
+        document.getElementById('import-data').addEventListener('click', () => importFile.click());
+        document.getElementById('reset-data').addEventListener('click', () => {
+          if (!confirm('ترجع بيانات البداية؟ ده هيمسح قائمة المشاريع الحالية من هذا المتصفح.')) return;
+          saveProjects(initialProjects.map(project => ({...project})));
+          renderAdminList(); stopEdit(); showToast('تمت استعادة مشاريع البداية');
+        });
+        document.getElementById('project-year').value = String(new Date().getFullYear());
+      }
+      function startEdit(id) {
+        const project = readProjects().find(item => item.id === id);
+        if (!project) return;
+        editingId = id;
+        document.getElementById('project-name').value = project.name || '';
+        document.getElementById('project-summary').value = project.summary || '';
+        document.getElementById('project-stack').value = project.stack || '';
+        document.getElementById('project-status').value = project.status || 'مكتمل';
+        document.getElementById('project-year').value = project.year || '';
+        document.getElementById('project-url').value = project.url || '';
+        document.getElementById('form-title').textContent = 'تعديل مشروع';
+        document.getElementById('save-button').textContent = 'حفظ التعديلات';
+        document.getElementById('cancel-edit').classList.remove('hidden');
+        document.getElementById('project-name').focus();
+      }
+      function stopEdit() {
+        editingId = null;
+        const form = document.getElementById('project-form');
+        if (form) form.reset();
+        const title = document.getElementById('form-title');
+        if (title) title.textContent = 'إضافة مشروع';
+        const save = document.getElementById('save-button');
+        if (save) save.textContent = 'إضافة المشروع';
+        const cancel = document.getElementById('cancel-edit');
+        if (cancel) cancel.classList.add('hidden');
+        const year = document.getElementById('project-year');
+        if (year) year.value = String(new Date().getFullYear());
+      }
+      function deleteProject(id) {
+        const project = readProjects().find(item => item.id === id);
+        if (!project || !confirm(`تحذف «${project.name}» من هذا المتصفح؟`)) return;
+        saveProjects(readProjects().filter(item => item.id !== id));
+        renderAdminList();
+        if (editingId === id) stopEdit();
+        showToast('تم حذف المشروع من هذا المتصفح');
+      }
+      function exportData() {
+        const file = new Blob([JSON.stringify(readProjects(), null, 2)], {type: 'application/json'});
+        const url = URL.createObjectURL(file);
+        const link = document.createElement('a');
+        link.href = url; link.download = 'kero-projects.json'; link.click();
+        URL.revokeObjectURL(url);
+        showToast('تم تجهيز نسخة JSON للتنزيل');
+      }
+      importFile.addEventListener('change', async () => {
+        const file = importFile.files && importFile.files[0];
+        if (!file) return;
+        try {
+          const parsed = JSON.parse(await file.text());
+          if (!Array.isArray(parsed) || parsed.some(item => !item || typeof item.name !== 'string' || typeof item.summary !== 'string')) throw new Error('invalid');
+          const normalized = parsed.map((item, index) => ({
+            id: String(item.id || `import-${Date.now()}-${index}`), name: item.name.slice(0, 80), summary: item.summary.slice(0, 260),
+            stack: String(item.stack || '').slice(0, 100), status: String(item.status || 'مكتمل'), year: String(item.year || ''), url: safeLink(String(item.url || ''))
+          }));
+          saveProjects(normalized); renderAdminList(); stopEdit(); showToast('تم استيراد المشاريع');
+        } catch (_) { showToast('ملف JSON غير صالح أو تنسيقه غير مدعوم'); }
+        importFile.value = '';
+      });
+      function render() {
+        if (location.hash === '#manage') renderAdmin();
+        else renderHome();
+      }
+      window.addEventListener('hashchange', () => {
+        render();
+        if (location.hash && location.hash !== '#manage' && location.hash !== '#home') {
+          requestAnimationFrame(() => document.getElementById(location.hash.slice(1))?.scrollIntoView());
+        } else if (location.hash === '#home' || !location.hash) window.scrollTo(0, 0);
+      });
+      render();
+      if (location.hash && location.hash !== '#manage' && location.hash !== '#home') {
+        requestAnimationFrame(() => document.getElementById(location.hash.slice(1))?.scrollIntoView());
+      }
+    })();
+  </script>
+</body>
+</html>
